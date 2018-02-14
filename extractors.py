@@ -9,6 +9,8 @@ import extract_benchmark
 import extract_parcc
 import usage_report
 
+__version__ = '0.0.1'
+
 class ExtractFrame(wx.Frame):
     """
     Base frame from which user selects commands to run. These commands ask
@@ -19,7 +21,7 @@ class ExtractFrame(wx.Frame):
     def __init__(self, *args, **kw):
         # ensure the parent's __init__ is called
         super(ExtractFrame, self).__init__(*args, **kw)
-
+        #self.version = version
         # create a panel in the frame
         pnl = wx.Panel(self)
         # and put some text with a larger bold font on it
@@ -174,16 +176,15 @@ class ExtractFrame(wx.Frame):
     def OnAbout(self, event):
         """Display an About Dialog"""
         wx.MessageBox("Ask Malcolm!",
-                      "The only solution",
+                      "Extractor Hub v{}".format(__version__),
                       wx.OK|wx.ICON_INFORMATION)
 
 
-def main():
+def main(v = "Error"):
     # When this module is run (not imported) then create the app, the
     # frame, show it, and start the event loop.
+    __version__ = v
     app = wx.App()
     frm = ExtractFrame(None, title='Extractor Hub')
     frm.Show()
     app.MainLoop()
-if __name__ == '__main__':
-        main()

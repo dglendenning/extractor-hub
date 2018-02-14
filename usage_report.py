@@ -465,8 +465,3 @@ def create_report():
         return False
     else:
         return True
-
-
-if __name__ == '__main__':
-    main()
-    print('hi')
