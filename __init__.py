@@ -16,11 +16,19 @@ def download(url, file_name):
 
 
 def main():
-    url = ("***REMOVED***"
-           "***REMOVED***")
+    print("Starting main function...")
+    #url = ("***REMOVED***"
+    #       "***REMOVED***")
 
+    # URL of the VERSION NUMBER TEXT FILE, not the real app file.
+    # This file has its NAME changed to each new version number upon release.
+    url = ("***REMOVED***"
+         "***REMOVED***")
+    print("URL set!")
     r = get(url)
+    print("Downloaded file")
     v = r.headers["content-disposition"]
+    print("Content Disposition:", v)
     v = v[v.find("Extractor Hub v")+14:v.find(".exe")]
 
     if (v != __version__ and sorted(v, __version__)[0] != __version__):
@@ -51,6 +59,8 @@ def main():
 
 
 
-
+print("Running __init__")
 if __name__ == "__main__":
+    print("Name is __main__")
     main()
+    print("End main")

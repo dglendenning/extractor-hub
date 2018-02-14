@@ -178,7 +178,7 @@ class ExtractFrame(wx.Frame):
                       wx.OK|wx.ICON_INFORMATION)
 
 
-def main()
+def main():
     # When this module is run (not imported) then create the app, the
     # frame, show it, and start the event loop.
     app = wx.App()
