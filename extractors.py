@@ -178,12 +178,12 @@ class ExtractFrame(wx.Frame):
                       wx.OK|wx.ICON_INFORMATION)
 
 
-
-
-if __name__ == '__main__':
+def main()
     # When this module is run (not imported) then create the app, the
     # frame, show it, and start the event loop.
     app = wx.App()
     frm = ExtractFrame(None, title='Extractor Hub')
     frm.Show()
     app.MainLoop()
+if __name__ == '__main__':
+        main()

@@ -3,7 +3,7 @@
 block_cipher = None
 
 
-a = Analysis(['extractors.py'],
+a = Analysis(['__init__.py'],
              pathex=['C:\\Users\\Malcolm\\Documents\\Atom Projects\\Extractor Hub'],
              binaries=[],
              datas=[],
