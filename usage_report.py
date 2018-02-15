@@ -8,14 +8,7 @@ import os.path
 import datetime as dt
 from datetime import timedelta as td
 import win32com.client as win32
-
-def setup_FTP():
-    server = '***REMOVED***'
-    database = ***REMOVED***
-    username =***REMOVED***
-    password = '***REMOVED***'
-    cnxn = pyodbc.connect('DRIVER=***REMOVED***;SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
-    return cnxn
+import mal_data as mal
 
 def setup_dest_file(name = "ERROR no name provided.xlsx", loc = os.path.join(os.getcwd(),"Usage Reports")):
     path = os.path.join(loc, name)
@@ -73,7 +66,7 @@ set @weekend='"""+str(week[1])+"'" + s
 
 def main():
     #getting connection object for FTP queries
-    connection = setup_FTP()
+    connection = mal.setup_FTP()
 
     #getting week start and end dates for report based on today's date
     dates = setup_dates()

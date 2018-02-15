@@ -7,6 +7,7 @@ import pandas as pd
 import os.path
 import sqlalchemy as sa
 import datetime as dt
+import mal_data as mal
 
 def parcc_or_pssa(cnxn, districtID):
     df = pd.read_sql("SELECT StateID from District with (nolock) WHERE DistrictID = "+str(districtID), cnxn)
@@ -53,11 +54,7 @@ def clean_term2(row):
 def extract(districtID):
 
     districtID = str(districtID)
-    server = '***REMOVED***'
-    database = ***REMOVED***
-    username =***REMOVED***
-    password = '***REMOVED***'
-    cnxn = pyodbc.connect('DRIVER=***REMOVED***;SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
+    cnxn = mal.setup_FTP()
     box = pd.read_sql("select Name from District with (nolock) WHERE DistrictID = \'"+districtID+"\'", cnxn)
     dname = box.at[0, 'Name']
     state_test, achievement_level = parcc_or_pssa(cnxn, districtID)
