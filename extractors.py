@@ -12,11 +12,7 @@ import usage_report
 __version__ = '0.0.1'
 
 class ExtractFrame(wx.Frame):
-    """
-    Base frame from which user selects commands to run. These commands ask
-    for their own arguments (like district IDs), the frame does not provide
-    them.
-    """
+    """Cross-platform window UI for Malcolm's extract utilities."""
 
     def __init__(self, *args, **kw):
         # ensure the parent's __init__ is called
@@ -41,7 +37,6 @@ class ExtractFrame(wx.Frame):
         # and a status bar
         self.CreateStatusBar()
         self.SetStatusText("Status: Idle")
-
 
     def makeMenuBar(self):
         """
@@ -104,9 +99,8 @@ class ExtractFrame(wx.Frame):
         """Close the frame, terminating the application."""
         self.Close(True)
 
-
     def BenchmarkExtract(self, event):
-        """Extract Benchmark for Navigator"""
+        """Extract Benchmark for Navigator Report."""
         districtID = self.getDistrictID()
         if districtID is None:
             return False
@@ -119,7 +113,7 @@ class ExtractFrame(wx.Frame):
         return True
 
     def PARCCExtract(self, event):
-        """Extract PARCC for Navigator"""
+        """Extract PARCC for Navigator Report."""
         districtID = self.getDistrictID()
         if districtID is None:
             return False
@@ -132,18 +126,16 @@ class ExtractFrame(wx.Frame):
         return True
 
     def UsageReport(self, event):
-        """Create Weekly Usage Reports"""
-
-        # Code goes here - we have a valid districtID by this point.
+        """Create Weekly Usage Report."""
         self.SetStatusText("Status: Extracting...")
         if usage_report.create_report():
             wx.MessageBox("Report Created!")
         else:
-            wx.MessageBox("Report Failed. Contact Malcolm for debugging.")
+            wx.MessageBox("Report Failed.")
         self.SetStatusText("Status: Idle")
 
-
     def getDistrictID(self):
+        """Query user for DistrictID and return it as a string."""
         dialog = wx.TextEntryDialog(
             self, "Please enter DistrictID", "DistrictID")
 
@@ -163,7 +155,15 @@ class ExtractFrame(wx.Frame):
                 return s
 
     def AddExtract(self, name, event, help = "", key = None):
-        """Add an item to the extract menu"""
+        """Add an item to the extract menu on the menu bar.
+
+        Keyword arguments:
+        name -- appears on the label in the Extract menu
+        event -- method of this class to run when clicked
+        help -- Help string displayed on status bar when hovered over
+        key -- Hotkey to run event
+        """
+
         if name[0] != "&":
             name = "&" + name
 
@@ -174,15 +174,14 @@ class ExtractFrame(wx.Frame):
         self.Bind(wx.EVT_MENU, event, item)
 
     def OnAbout(self, event):
-        """Display an About Dialog"""
+        """Display an About Dialog with the version number."""
         wx.MessageBox("Ask Malcolm!",
                       "Extractor Hub v{}".format(__version__),
                       wx.OK|wx.ICON_INFORMATION)
 
 
-def main(v = "Error"):
-    # When this module is run (not imported) then create the app, the
-    # frame, show it, and start the event loop.
+def main(v):
+    """Get version number from __init__ and launch an ExtractFrame."""
     __version__ = v
     app = wx.App()
     frm = ExtractFrame(None, title='Extractor Hub')
