@@ -4,4 +4,7 @@ build
 dist
 Archived
 Extractor Hub.exe
-.git.bfg-report
+*.bfg-report
+passwords*
+bfg.jar
+__pycache__
