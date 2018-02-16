@@ -1,8 +1,4 @@
-#!/bin/python
-"""extractors.py
-
-Compilation of LinkIt data extractors in one UI window.
-"""
+"""Compilation of LinkIt data extractors in one UI window."""
 
 import wx
 import extract_benchmark
@@ -11,26 +7,18 @@ import usage_report
 
 __version__ = '0.0.1'
 
+
 class ExtractFrame(wx.Frame):
     """Cross-platform window UI for Malcolm's extract utilities."""
 
     def __init__(self, *args, **kw):
+        """Call parent constructor and build UI elements."""
         # ensure the parent's __init__ is called
         super(ExtractFrame, self).__init__(*args, **kw)
-        #self.version = version
         # create a panel in the frame
         pnl = wx.Panel(self)
-        # and put some text with a larger bold font on it
-        #st = wx.StaticText(pnl, label="", pos=(25,25))
-        #font = st.GetFont()
-        #font.PointSize += 10
-        #font = font.Bold()
-        #st.SetFont(font)
-
-
-        #added by mal til they figure out how to access Panels and StaticText
+        # added by mal til they figure out how to access Panels
         self.panel = pnl
-        #self.windowText = st
         # create a menu bar
         self.makeMenuBar()
 
@@ -39,12 +27,7 @@ class ExtractFrame(wx.Frame):
         self.SetStatusText("Status: Idle")
 
     def makeMenuBar(self):
-        """
-        A menu bar is composed of menus, which are composed of menu items.
-        This method builds a set of menus and binds handlers to be called
-        when the menu item is selected.
-        """
-
+        """Build menu bar and bind methods to each item."""
         # Make a file menu with Hello and Exit items
         fileMenu = wx.Menu()
         fileMenu.AppendSeparator()
@@ -57,23 +40,15 @@ class ExtractFrame(wx.Frame):
         self.extractMenu = wx.Menu()
 
         self.AddExtract(
-            "Extract Benchmark",
-            self.BenchmarkExtract,
-            help = "Extract data for Benchmark Navigator",
-            key = "B")
-
+            "Extract Benchmark", self.BenchmarkExtract,
+            help="Extract data for Benchmark Navigator", key="B")
         self.AddExtract(
-            "Extract PARCC",
-            self.PARCCExtract,
-            help = "Extract data for PARCC Report",
-            key = "P")
-
+            "Extract PARCC", self.PARCCExtract,
+            help="Extract data for PARCC Report", key="P")
         self.AddExtract(
-            "Weekly Usage Report",
-            self.UsageReport,
-            help = "Create report of this past week's usage data (FRI - THU)",
-            key = "U")
-
+            "Weekly Usage Report", self.UsageReport,
+            help="Create report of this past week's usage data (FRI - THU)",
+            key="U")
 
         # Make the menu bar and add the three menus to it. The '&' defines
         # that the next letter is the "mnemonic" for the menu item. On the
@@ -83,7 +58,6 @@ class ExtractFrame(wx.Frame):
         menuBar.Append(fileMenu, "&File")
         menuBar.Append(helpMenu, "&Help")
         menuBar.Append(self.extractMenu, "&Extract")
-
 
         # Gives the menu bar to the frame (can be edited/appended afterward)
         self.SetMenuBar(menuBar)
@@ -154,7 +128,7 @@ class ExtractFrame(wx.Frame):
             else:
                 return s
 
-    def AddExtract(self, name, event, help = "", key = None):
+    def AddExtract(self, name, event, help="", key=None):
         """Add an item to the extract menu on the menu bar.
 
         Keyword arguments:
@@ -163,7 +137,6 @@ class ExtractFrame(wx.Frame):
         help -- Help string displayed on status bar when hovered over
         key -- Hotkey to run event
         """
-
         if name[0] != "&":
             name = "&" + name
 
@@ -177,12 +150,11 @@ class ExtractFrame(wx.Frame):
         """Display an About Dialog with the version number."""
         wx.MessageBox("Ask Malcolm!",
                       "Extractor Hub v{}".format(__version__),
-                      wx.OK|wx.ICON_INFORMATION)
+                      wx.OK | wx.ICON_INFORMATION)
 
 
-def main(v):
+def main():
     """Get version number from __init__ and launch an ExtractFrame."""
-    __version__ = v
     app = wx.App()
     frm = ExtractFrame(None, title='Extractor Hub')
     frm.Show()
