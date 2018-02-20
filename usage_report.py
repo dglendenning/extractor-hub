@@ -516,5 +516,4 @@ def create_report():
         print(ex, type(ex))
         raise ex
         return False
-    else:
-        return True
+    return True

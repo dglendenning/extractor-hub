@@ -1,14 +1,13 @@
 """Auto-update if there are updates, otherwise launch main script."""
+import mal_data as mal
 import extractors
-from requests import get  # to make GET request
+from requests import get
 import sys
 import os
 
 __version__ = extractors.__version__
-_ver_url = ("***REMOVED***"
-            "***REMOVED***")
-_app_url = ("***REMOVED***"
-            "***REMOVED***")
+_ver_url = mal.update_ver_url
+_app_url = mal.update_app_url
 _app_name = "Extractor Hub.exe"
 _app_path = os.path.join(os.getcwd(), _app_name)
 
@@ -24,7 +23,7 @@ def download(url, file_name):
 
 
 def update():
-    """Get file from ***REMOVED*** and overrwrite this app with it.
+    """Get file from online and overrwrite this app with it.
 
     Only called once we know there's an update, since it closes the
     program.
@@ -76,7 +75,7 @@ def update_available():
 
 def main():
     """Check for updates, then either update or launch."""
-    # If we just updated, remove old version.
+    # If we have just updated, remove old version.
     if os.path.exists("OLD.deleteme"):
         os.remove("OLD.deleteme")
     # If there's an update, install it.
