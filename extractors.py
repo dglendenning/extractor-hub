@@ -188,6 +188,3 @@ def main():
     frm = ExtractFrame(None, title='Extractor Hub')
     frm.Show()
     app.MainLoop()
-
-
-main()

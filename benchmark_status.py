@@ -106,7 +106,3 @@ def main(districtID, form):
         ws.Cells.EntireColumn.AutoFit()
     mal.excel_save_quit(wb, excel, file_name)
     return (f"File created in {file_path}.")
-
-
-if __name__ == "__main__":
-    main(3757, "B")
