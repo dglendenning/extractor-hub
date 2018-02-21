@@ -4,8 +4,9 @@ import wx
 import extract_benchmark
 import extract_parcc
 import usage_report
+import benchmark_status
 
-__version__ = '0.0.1'
+__version__ = '0.0.2'
 
 
 class ExtractFrame(wx.Frame):
@@ -49,7 +50,10 @@ class ExtractFrame(wx.Frame):
             "Weekly Usage Report", self.UsageReport,
             help="Create report of this past week's usage data (FRI - THU)",
             key="U")
-
+        self.AddExtract(
+            "Get Benchmark Status", self.BenchmarkStatus,
+            help="Find which students are/are not finished with a Benchmark.",
+            key="S")
         # Make the menu bar and add the three menus to it. The '&' defines
         # that the next letter is the "mnemonic" for the menu item. On the
         # platforms that support it those letters are underlined and can be
@@ -82,6 +86,21 @@ class ExtractFrame(wx.Frame):
         # Code goes here - we have a valid districtID by this point.
         self.SetStatusText("Status: Extracting...")
         m = extract_benchmark.extract(districtID)
+        self.SetStatusText("Status: Idle")
+        wx.MessageBox(m)
+        return True
+
+    def BenchmarkStatus(self, event):
+        """Get Benchmark completion status."""
+        districtID = self.getDistrictID()
+        if districtID is None:
+            return False
+        form = self.getForm()
+        if form not in ["A", "B", "C"]:
+            return False
+        # Code goes here - we have a valid districtID by this point.
+        self.SetStatusText("Status: Extracting...")
+        m = benchmark_status.main(districtID, form)
         self.SetStatusText("Status: Idle")
         wx.MessageBox(m)
         return True
@@ -128,6 +147,16 @@ class ExtractFrame(wx.Frame):
             else:
                 return s
 
+    def getForm(self):
+        """Get A, B or C from user."""
+        dialog = wx.SingleChoiceDialog(self, "Select a Form", "Form",
+                                       choices=["A", "B", "C"])
+        while True:
+            if dialog.ShowModal() == wx.ID_CANCEL:
+                break
+            choice = dialog.GetSelection()
+            return ["A", "B", "C"][choice]
+
     def AddExtract(self, name, event, help="", key=None):
         """Add an item to the extract menu on the menu bar.
 
@@ -159,3 +188,6 @@ def main():
     frm = ExtractFrame(None, title='Extractor Hub')
     frm.Show()
     app.MainLoop()
+
+
+main()

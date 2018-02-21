@@ -517,3 +517,7 @@ def create_report():
         raise ex
         return False
     return True
+
+
+if __name__ == "__main__":
+    main()
