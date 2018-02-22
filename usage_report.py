@@ -7,9 +7,9 @@ import win32com.client as win32
 import mal_data as mal
 
 
-def setup_dest_file(name, loc):
+def setup_dest_file(path):
     """Make writer for excel file."""
-    path = os.path.join(loc, name)
+    loc = os.path.split(path)[1]
     if not os.path.exists(loc):
         os.makedirs(loc)
     writer = pd.ExcelWriter(path, 'xlsxwriter',
@@ -85,8 +85,10 @@ def main():
 
     # Set up Excel file and name it.
     name = str(dates["This Week"][1]) + " Weekly Usage Report.xlsx"
-    writer = setup_dest_file(name, os.path.join(os.getcwd(),
-                                                "Usage Reports"))
+    path = os.path.join(os.getcwd(), "Usage Reports", name)
+    if os.path.exists(path):
+        os.remove(path)
+    writer = setup_dest_file(path)
 
     # Grab reference to the workbook and add some formats.
     workbook = writer.book
@@ -489,10 +491,9 @@ def main():
         C6 = C6 + 4
 
         weekcount = weekcount + 1
-    path = os.path.join(os.getcwd(), "Usage Reports", name)
     writer.save()
     # Handle some special formatting by hijacking Excel.
-    excel = win32.gencache.EnsureDispatch('Excel.Application')
+    excel = win32.DispatchEx('Excel.Application')
     wb = excel.Workbooks.Open(path)
     for ws in wb.Worksheets:
         ws.Columns.AutoFit()
@@ -502,9 +503,7 @@ def main():
     ws.Range('G:J,R:U,AC:AF').NumberFormat = '0%'
     ws = wb.Worksheets("# of Data Locker")
     ws.Range("A4:J10")
-    if os.path.exists(path):
-        os.remove(path)
-    wb.SaveAs(path)
+    wb.Save()
     excel.Application.Quit()
 
 
