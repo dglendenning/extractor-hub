@@ -9,7 +9,7 @@ import mal_data as mal
 
 def setup_dest_file(path):
     """Make writer for excel file."""
-    loc = os.path.split(path)[1]
+    loc = os.path.split(path)[0]
     if not os.path.exists(loc):
         os.makedirs(loc)
     writer = pd.ExcelWriter(path, 'xlsxwriter',
