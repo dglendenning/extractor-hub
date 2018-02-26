@@ -6,7 +6,7 @@ import extract_parcc
 import usage_report
 import benchmark_status
 
-__version__ = '0.0.2'
+__version__ = '0.0.3'
 
 
 class ExtractFrame(wx.Frame):
