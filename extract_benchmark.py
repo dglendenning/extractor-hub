@@ -89,7 +89,8 @@ def extract(districtID):
         where dt.DistrictID=@districtid and tr.ResultDate>@resultdate
         and vt.Name like '%LinkIt%form%'
         and not (vt.Name like '%Link%it%form%CR%'
-        or vt.Name like '%Retake%')
+        or vt.Name like '%Retake%'
+        or vt.Name like '%luppino%')
         order by tr.UpdatedDate desc""", cnxn, parse_dates=['ResultDate'])
 
     if(not box.empty):
