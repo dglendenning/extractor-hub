@@ -1,11 +1,23 @@
 """Auto-update if there are updates, otherwise launch main script."""
-import mal_data as mal
-import extractors
-from requests import get
 import sys
 import os
+from requests import get
+import mal_data as mal
+import extractors
 
-__version__ = extractors.__version__
+
+if getattr(sys, 'frozen', False):
+    # running in a bundle
+    _mei_dir = sys._MEIPASS
+else:
+    # running live
+    _mei_dir = os.path.split(__file__)
+
+_version_file = os.path.join(_mei_dir, "version.txt")
+
+with open(_version_file, 'r') as file:
+    __version__ = file.readline()
+
 _ver_url = mal.update_ver_url
 _app_url = mal.update_app_url
 _app_name = "Extractor Hub.exe"
@@ -83,7 +95,7 @@ def main():
         update()
     # Otherwise, launch the app.
     else:
-        extractors.main()
+        extractors.main(__version__)
 
 
 if __name__ == "__main__":

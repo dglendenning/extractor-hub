@@ -6,7 +6,7 @@ import extract_parcc
 import usage_report
 import benchmark_status
 
-__version__ = '0.0.3'
+__version__ = None  # set in main()
 
 
 class ExtractFrame(wx.Frame):
@@ -182,8 +182,10 @@ class ExtractFrame(wx.Frame):
                       wx.OK | wx.ICON_INFORMATION)
 
 
-def main():
-    """Get version number from __init__ and launch an ExtractFrame."""
+def main(version='0.0.0'):
+    """Launch an ExtractFrame."""
+    global __version__
+    __version__ = version
     app = wx.App()
     frm = ExtractFrame(None, title='Extractor Hub')
     frm.Show()
