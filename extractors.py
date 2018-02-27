@@ -1,12 +1,25 @@
 """Compilation of LinkIt data extractors in one UI window."""
 
+import os
+import sys
 import wx
 import extract_benchmark
 import extract_parcc
 import usage_report
 import benchmark_status
+import extractor_update
 
-__version__ = None  # set in main()
+if getattr(sys, 'frozen', False):
+    # running in a bundle
+    _mei_dir = sys._MEIPASS
+else:
+    # running live
+    _mei_dir = os.path.split(__file__)[0]
+
+_version_file = os.path.join(_mei_dir, "version.txt")
+
+with open(_version_file, 'r') as file:
+    __version__ = file.readline()
 
 
 class ExtractFrame(wx.Frame):
@@ -38,6 +51,8 @@ class ExtractFrame(wx.Frame):
         # Now a help menu for the about item
         helpMenu = wx.Menu()
         aboutItem = helpMenu.Append(wx.ID_ABOUT)
+        updateItem = helpMenu.Append(
+            -1, "&Update", "Check for new version and download update.")
         self.extractMenu = wx.Menu()
 
         self.AddExtract(
@@ -72,6 +87,7 @@ class ExtractFrame(wx.Frame):
         # NOTE: Not necessary if using self.AddExtract()
         self.Bind(wx.EVT_MENU, self.OnExit,  exitItem)
         self.Bind(wx.EVT_MENU, self.OnAbout, aboutItem)
+        self.Bind(wx.EVT_MENU, self.OnUpdate, updateItem)
 
     def OnExit(self, event):
         """Close the frame, terminating the application."""
@@ -181,12 +197,25 @@ class ExtractFrame(wx.Frame):
                       "Extractor Hub v{}".format(__version__),
                       wx.OK | wx.ICON_INFORMATION)
 
+    def OnUpdate(self, event):
+        """Check for updates, update if new version available."""
+        if extractor_update.update_available(__version__):
+            extractor_update.update()
+        else:
+            wx.MessageBox("No Update Available.", "", wx.OK)
 
-def main(version='0.0.0'):
+
+def main():
     """Launch an ExtractFrame."""
-    global __version__
-    __version__ = version
+    # If we have just updated, remove old version.
+    if os.path.exists("OLD.deleteme"):
+        os.remove("OLD.deleteme")
+
     app = wx.App()
     frm = ExtractFrame(None, title='Extractor Hub')
     frm.Show()
     app.MainLoop()
+
+
+if __name__ == "__main__":
+    main()

@@ -3,20 +3,6 @@ import sys
 import os
 from requests import get
 import mal_data as mal
-import extractors
-
-
-if getattr(sys, 'frozen', False):
-    # running in a bundle
-    _mei_dir = sys._MEIPASS
-else:
-    # running live
-    _mei_dir = os.path.split(__file__)
-
-_version_file = os.path.join(_mei_dir, "version.txt")
-
-with open(_version_file, 'r') as file:
-    __version__ = file.readline()
 
 _ver_url = mal.update_ver_url
 _app_url = mal.update_app_url
@@ -67,36 +53,18 @@ def version_from_header(string):
     return string[head:tail]
 
 
-def update_available():
+def update_available(local_version):
     """Return true if local version is older than latest version."""
     global _ver_url
-    global __version__
     # Get most recent version.
     header = get(_ver_url).headers["content-disposition"]
     web_version = version_from_header(header)
     # Convert version numbers to lists to compare
     web_vlist = [int(item) for item in web_version.split('.')]
-    loc_vlist = [int(item) for item in __version__.split('.')]
+    loc_vlist = [int(item) for item in local_version.split('.')]
     for web, local in zip(web_vlist, loc_vlist):
         if web > local:     # There's a new version.
             return True
         elif local > web:   # We're running a dev build.
             return False
         return False    # We're up to date.
-
-
-def main():
-    """Check for updates, then either update or launch."""
-    # If we have just updated, remove old version.
-    if os.path.exists("OLD.deleteme"):
-        os.remove("OLD.deleteme")
-    # If there's an update, install it.
-    if update_available():
-        update()
-    # Otherwise, launch the app.
-    else:
-        extractors.main(__version__)
-
-
-if __name__ == "__main__":
-    main()
